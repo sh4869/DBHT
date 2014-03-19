@@ -1,8 +1,44 @@
 #coding: utf-8
 require 'twitter'
 require 'csv'
+require 'oauth'
+require 'oauth/consumer'
+require './keys.rb'
 
-rest_client = Twitter::REST::Client.new do |config|
+SourcePath = File.expand_path('../', __FILE__)
+TokenFile = "#{SourcePath}/token"
+
+def oauth_first
+  @consumer = OAuth::Consumer.new(CONSUMER_KEY ,CONSUMER_SECRET,{
+      :site=>"https://api.twitter.com"
+	    })
+
+  @request_token = @consumer.get_request_token
+
+  puts "Please access this URL: #{@request_token.authorize_url}"
+  puts "and get the Pin code."
+
+  print "Enter your Pin code:"
+  pin  = gets.chomp
+
+  @access_token = @request_token.get_access_token(:oauth_verifier => pin)
+
+  open(TokenFile, "a" ){|f| f.write("#{@access_token.token}\n")}
+  open(TokenFile, "a" ){|f| f.write("#{@access_token.secret}\n")}
+end
+
+unless File::exist?(TokenFile)
+    oauth_first
+end
+
+open(TokenFile){ |file|
+    ACCESS_TOKEN = file.readlines.values_at(0)[0].gsub("\n","")
+}
+open(TokenFile){ |file|
+    ACCESS_SECRET = file.readlines.values_at(1)[0].gsub("\n","")
+}  
+
+@rest_client = Twitter::REST::Client.new do |config|
   config.consumer_key        = CONSUMER_KEY
   config.consumer_secret     = CONSUMER_SECRET
   config.access_token        = ACCESS_TOKEN
@@ -20,15 +56,14 @@ CSV.foreach("tweets.csv") do |tweets|
 	puts tweets
 	at = tweets.first
 	begin
-	  rest_client.destroy_status(at)
+	  @rest_client.destroy_status(at)
 	rescue Twitter::Error::NotFound
-	  puts "エラーが発生した模様です。すでにそのツイートは消されている可能性があります。"
+	  puts "すでにそのツイートは消されている可能性があります。"
 	  next
 	ensure
 	  cnt += 1
 	end
   end
-end
 end
 
 str =  "#{delete}という文字列を含む#{cnt}個のツイートを削除しました。"
@@ -42,7 +77,7 @@ while ans != "y" && ans !="n"
 end
 
 if ans == "y" 
-  rest_client.update(str)
+  @rest_client.update(str)
   puts "ツイートしました。お疲れ様でした。"
 elsif ans == "n"
   puts "お疲れ様でした"
