@@ -13,7 +13,15 @@ How to Use
 5. それを適当なフォルダに解凍し、その中に入っている[tweets.csv]をコピーしてどこかに置きます。
 6. このレポジトリをcloneします。
     [$git clone https://github.com/sh4869/Delete_BH_of_Twitter.git]
-7. そのフォルダにtweets.csvをいれ、keyを設定しプログラムをうごかします。
+7. そのフォルダにtweets.csvをいれます。
+8. 次のコマンドうてば完成です。 
+
+```
+$bundle install
+$bundle exec ruby delete_twitter_his.rb
+```
+
+最初にoauth認証をしてください。
 
 
 LICENSE
