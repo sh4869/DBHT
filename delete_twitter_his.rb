@@ -43,7 +43,7 @@ CSV.foreach("tweets.csv") do |tweets|
 	rescue Twitter::Error::NotFound
 	  puts "すでにそのツイートは消されている可能性があります。"
 	  next
-	ensure
+	else
 	  cnt += 1
 	end
   end
