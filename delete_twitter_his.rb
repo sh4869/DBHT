@@ -4,6 +4,9 @@ require 'csv'
 require './src/keys.rb'
 require './src/oauth.rb'
 
+SourcePath = File.expand_path('../', __FILE__)
+CSVFile = "#{SourcePath}/tweets.csv"
+
 unless File::exist?(TokenFile)
     oauth_first
 end
@@ -22,11 +25,14 @@ open(TokenFile){ |file|
   config.access_token_secret = ACCESS_SECRET
 end
 
-cnt = 0
+unless File::exist?(CSVFile)
+  puts "tweets.csvが見つかりません。"
+  exit
+end
 
+cnt = 0
 puts "どんな文字の含まれたツイートを消したいか入力してください。"
 delete = gets.chomp
-
 
 CSV.foreach("tweets.csv") do |tweets|
   if tweets.grep(/(.+)?#{delete}(.+)?/) != []
