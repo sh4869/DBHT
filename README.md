@@ -12,9 +12,13 @@ How to Use
 4. メールが来たら、そこに記載されているリンクに飛び、[tweets.zip]をダウンロードします。
 5. それを適当なフォルダに解凍し、その中に入っている[tweets.csv]をコピーしてどこかに置きます。
 6. このレポジトリをcloneします。
-    [$git clone https://github.com/sh4869/Delete_BH_of_Twitter.git]
+
+```    
+$git clone https://github.com/sh4869/Delete_BH_of_Twitter.git
+```
+
 7. そのフォルダにtweets.csvをいれます。
-8. 次のコマンドうてば完成です。 
+8. 次のコマンドをうてば完成です。 
 
 ```
 $bundle install
