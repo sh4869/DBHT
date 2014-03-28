@@ -36,7 +36,6 @@ delete = gets.chomp
 
 CSV.foreach("tweets.csv") do |tweets|
   if tweets.grep(/(.+)?#{delete}(.+)?/) != []
-	puts tweets
 	at = tweets.first
 	begin
 	  @rest_client.destroy_status(at)
@@ -45,6 +44,8 @@ CSV.foreach("tweets.csv") do |tweets|
 	  next
 	else
 	  cnt += 1
+	ensure
+	  puts tweets
 	end
   end
 end
