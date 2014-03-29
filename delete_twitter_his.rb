@@ -8,14 +8,14 @@ SourcePath = File.expand_path('../', __FILE__)
 CSVFile = "#{SourcePath}/tweets.csv"
 
 unless File::exist?(TokenFile)
-    oauth_first
+  oauth_first
 end
 
 open(TokenFile){ |file|
-    ACCESS_TOKEN = file.readlines.values_at(0)[0].gsub("\n","")
+  ACCESS_TOKEN = file.readlines.values_at(0)[0].gsub("\n","")
 }
 open(TokenFile){ |file|
-    ACCESS_SECRET = file.readlines.values_at(1)[0].gsub("\n","")
+  ACCESS_SECRET = file.readlines.values_at(1)[0].gsub("\n","")
 }  
 
 @rest_client = Twitter::REST::Client.new do |config|
@@ -53,16 +53,28 @@ end
 str =  "#{delete}という文字列を含む#{cnt}個のツイートを削除しました。 | by sh4869sh https://github.com/sh4869/Delete_BH_of_Twitter"
 puts str
 puts "この結果をツイートしますか?　する:y しない:n"
-ans = gets.chomp
+ans_1 = gets.chomp
 
 while ans != "y" && ans !="n"
   puts "yかnで入力してください。"
-  ans = gets.chomp
+  ans_1 = gets.chomp
 end
 
-if ans == "y" 
-  @rest_client.update(str)
+if ans_1 == "y"
+  puts "なにかコメントを追加しますか？ する:y しない:n"
+  ans_2 = gets.shomp
+  while  ans != "y" && ans != "n"
+	puts "yかnで入力してください"
+	ans_2 = gets.chomp
+  end
+  if ans_2 == "y"
+	puts "コメントを入力してください。終わったらENTERをおしてください。"
+	comment = gets.chomp
+	@rest_client.update("#{comment} / #{str}")
+  elsif ans_2 = "n"
+	@rest_client.update(str)
+  end  
   puts "ツイートしました。お疲れ様でした。"
-elsif ans == "n"
+elsif ans_1 == "n"
   puts "お疲れ様でした"
 end
