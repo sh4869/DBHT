@@ -50,7 +50,7 @@ CSV.foreach("tweets.csv") do |tweets|
   end
 end
 
-str =  "#{delete}という文字列を含む#{cnt}個のツイートを削除しました。"
+str =  "#{delete}という文字列を含む#{cnt}個のツイートを削除しました。 | by sh4869sh https://github.com/sh4869/Delete_BH_of_Twitter"
 puts str
 puts "この結果をツイートしますか?　する:y しない:n"
 ans = gets.chomp
