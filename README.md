@@ -3,7 +3,7 @@ Delete_BH_of_twitter
 
 tweets.csvを使って黒歴史を自由に削除します。
 
-How to Use
+##How to Use
 ====
 
 1. まず、Twitterの公式ウェブにPCからアクセスします。
@@ -28,7 +28,10 @@ $bundle exec ruby delete_twitter_his.rb
 最初にoauth認証をしてください。
 
 
-LICENSE
+##LICENSE
 ====
 
 The MIT license
+
+-----
+(c) @2014 sh4869
