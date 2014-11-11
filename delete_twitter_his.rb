@@ -38,14 +38,14 @@ CSV.foreach("tweets.csv") do |tweets|
   if tweets.grep(/(.+)?#{delete}(.+)?/) != []
 	at = tweets.first
 	begin
+	  print "id:#{at} "
 	  @rest_client.destroy_status(at)
 	rescue Twitter::Error::NotFound
 	  puts "すでにそのツイートは消されている可能性があります。"
 	  next
 	else
 	  cnt += 1
-	ensure
-	  puts tweets
+	  puts "text:#{tweets[5]} time:#{tweets[3]}"
 	end
   end
 end
@@ -53,28 +53,17 @@ end
 str =  "#{delete}という文字列を含む#{cnt}個のツイートを削除しました。 | by https://github.com/sh4869/Delete_BH_of_Twitter"
 puts str
 puts "この結果をツイートしますか?　する:y しない:n"
-ans_1 = gets.chomp
+answer = gets.chomp
 
-while ans != "y" && ans !="n"
+loop do
+  if answer == "y"
+    @rest_client.update(str)
+	break
+  elsif answer == "n"
+	puts "お疲れ様でした"
+	break
+  else 
   puts "yかnで入力してください。"
-  ans_1 = gets.chomp
-end
-
-if ans_1 == "y"
-  puts "なにかコメントを追加しますか？ する:y しない:n"
-  ans_2 = gets.shomp
-  while  ans != "y" && ans != "n"
-	puts "yかnで入力してください"
-	ans_2 = gets.chomp
+  answer = gets.chomp
   end
-  if ans_2 == "y"
-	puts "コメントを入力してください。終わったらENTERをおしてください。"
-	comment = gets.chomp
-	@rest_client.update("#{comment} / #{str}")
-  elsif ans_2 = "n"
-	@rest_client.update(str)
-  end  
-  puts "ツイートしました。お疲れ様でした。"
-elsif ans_1 == "n"
-  puts "お疲れ様でした"
 end
