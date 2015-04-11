@@ -35,7 +35,7 @@ puts "どんな文字の含まれたツイートを消したいか入力して�
 delete = gets.chomp
 
 CSV.foreach("tweets.csv") do |tweets|
-  if tweets[5].grep(/(.+)?#{delete}(.+)?/) != []
+  if tweets[5].lines.grep(/(.+)?#{delete}(.+)?/) != []
 	at = tweets.first
 	begin
 	  print "id:#{at} "
