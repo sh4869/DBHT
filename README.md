@@ -1,10 +1,9 @@
-Delete_BH_of_twitter
-====================
+Delete Black History of twitter
+======
 
-tweets.csvを使って黒歴史を自由に削除します。
+tweets.csvを使ってTwitterの黒歴史を自由に削除します。
 
-##How to Use
-====
+## 使い方
 
 1. まず、Twitterの公式ウェブにPCからアクセスします。
 2. その後、画面の右端の歯車のアイコンをクリックし、設定を選びます。
@@ -13,7 +12,7 @@ tweets.csvを使って黒歴史を自由に削除します。
 5. それを適当なフォルダに解凍し、その中に入っている[tweets.csv]をコピーしてどこかに置きます。
 6. このレポジトリをcloneします。
 
-```zsh    
+```zsh   
 $git clone https://github.com/sh4869/Delete_BH_of_Twitter.git
 ```
 
@@ -24,12 +23,10 @@ $git clone https://github.com/sh4869/Delete_BH_of_Twitter.git
 $bundle install
 $bundle exec ruby delete_twitter_his.rb
 ```
-
 最初にoauth認証をしてください。
 
 
 ##LICENSE
-====
 
 The MIT license
 
