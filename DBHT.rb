@@ -27,7 +27,7 @@ end
 
 unless File::exist?(CSVFile)
   puts "tweets.csvが見つかりません。"
-  exit
+  exit 1
 end
 
 cnt = 0
