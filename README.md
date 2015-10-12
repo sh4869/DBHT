@@ -1,5 +1,7 @@
-Delete Black History of twitter
+DBHT
 ======
+
+DBHT - Delete Black History of Twitter
 
 tweets.csvを使ってTwitterの黒歴史を自由に削除します。
 
