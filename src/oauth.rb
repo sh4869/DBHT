@@ -2,8 +2,8 @@ require 'oauth'
 require 'oauth/consumer'
 require './src/keys.rb'
 
-SourcePath = File.expand_path('../', __FILE__)
-TokenFile = "#{SourcePath}/token"
+OAuthSourcePath = File.expand_path('../', __FILE__)
+TokenFile = "#{OAuthSourcePath}/token"
 
 def oauth_first
   @consumer = OAuth::Consumer.new(CONSUMER_KEY ,CONSUMER_SECRET,{
