@@ -11,15 +11,15 @@ TokenFile = "#{SourcePath}/token"
 
 def oauth_first
   @consumer = OAuth::Consumer.new(CONSUMER_KEY ,CONSUMER_SECRET,{
-      :site=>"https://api.twitter.com"
-	    })
+	:site=>"https://api.twitter.com"
+  })
 
   @request_token = @consumer.get_request_token
 
   puts "Please access this URL: #{@request_token.authorize_url}"
   puts "and get the Pin code."
 
-  print "Enter your Pin code:"
+  print "Enter your Pin code :"
   pin  = gets.chomp
 
   @access_token = @request_token.get_access_token(:oauth_verifier => pin)
@@ -28,36 +28,35 @@ def oauth_first
   open(TokenFile, "a" ){|f| f.write("#{@access_token.secret}\n")}
 end
 
+
 unless File::exist?(TokenFile)
   oauth_first
 end
 
-open(TokenFile){ |file|
-  ACCESS_TOKEN = file.readlines.values_at(0)[0].gsub("\n","")
-}
-open(TokenFile){ |file|
-  ACCESS_SECRET = file.readlines.values_at(1)[0].gsub("\n","")
-}  
+file = open(TokenFile)
+access_token = file.readlines[0]
+access_secret = file.readlines[1]
+file.close  
 
 @rest_client = Twitter::REST::Client.new do |config|
   config.consumer_key        = CONSUMER_KEY
   config.consumer_secret     = CONSUMER_SECRET
-  config.access_token        = ACCESS_TOKEN
-  config.access_token_secret = ACCESS_SECRET
+  config.access_token        = access_token
+  config.access_token_secret = access_secret
 end
 
 unless File::exist?(CSVFile)
   puts "tweets.csvが見つかりません。"
   exit 1
-end
+end 
 
 cnt = 0
 puts "どんな文字の含まれたツイートを消したいか入力してください。"
-delete = gets.chomp
+delete_word = gets.chomp
 
 CSV.foreach("tweets.csv") do |tweets|
-  if tweets[5].lines.grep(/(.+)?#{delete}(.+)?/) != []
-	at = tweets.first
+  if tweets[5].lines.grep(/(.+)?#{delete_word}(.+)?/) != []
+	  at = tweets.first
 	begin
 	  print "id:#{at} "
 	  @rest_client.destroy_status(at)
@@ -71,20 +70,13 @@ CSV.foreach("tweets.csv") do |tweets|
   end
 end
 
-str =  "#{delete}という文字列を含む#{cnt}個のツイートを削除しました。 | by https://github.com/sh4869/Delete_BH_of_Twitter"
+str =  "#{delete_word}という文字列を含む#{cnt}個のツイートを削除しました。 | by https://github.com/sh4869/Delete_BH_of_Twitter"
 puts str
 puts "この結果をツイートしますか?　する:y しない:n"
 answer = gets.chomp
 
-loop do
-  if answer == "y"
-    @rest_client.update(str)
-	break
-  elsif answer == "n"
-	puts "お疲れ様でした"
-	break
-  else 
-  puts "yかnで入力してください。"
-  answer = gets.chomp
-  end
+if answer == "y" || answer == "Y"
+  @rest_client.update(str)
+else 
+  puts "お疲れ様でした"
 end
