@@ -1,7 +1,5 @@
-DBHT
-======
-
 DBHT - Delete Black History of Twitter
+======
 
 tweets.csvを使ってTwitterの黒歴史を自由に削除します。
 
@@ -23,7 +21,7 @@ $git clone https://github.com/sh4869/Delete_BH_of_Twitter.git
 
 ```zsh
 $bundle install
-$bundle exec ruby delete_twitter_his.rb
+$bundle exec ruby DBHT.rb
 ```
 最初にoauth認証をしてください。
 
