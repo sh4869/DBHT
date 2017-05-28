@@ -11,7 +11,7 @@ TokenFile = "#{SourcePath}/token"
 
 def oauth_first
   @consumer = OAuth::Consumer.new(CONSUMER_KEY ,CONSUMER_SECRET,{
-	:site=>"https://api.twitter.com"
+    :site=>"https://api.twitter.com"
   })
 
   @request_token = @consumer.get_request_token
@@ -33,7 +33,7 @@ def print_usage
 DBHT - Delete Black History of Twitter
 --------------------------------------------------
 Usage: 1. Deploy Your tweets.csv in this directory
-	   2. Run This Program
+     2. Run This Program
 
 © 2014-2015 sh4869 <nobuk4869@gmail.com>		 
 EOS
@@ -41,12 +41,12 @@ end
 
 def main
   if ARGV[0] == "-h" 
-	print_usage
-	exit
+    print_usage
+    exit
   end
 
   unless File::exist?(TokenFile)
-	oauth_first
+    oauth_first
   end
   #Read File 
   @access_token = ""
@@ -57,16 +57,16 @@ def main
   @access_secret = filelines[1].gsub("\n","")
 
   @rest_client = Twitter::REST::Client.new do |config|
-	config.consumer_key        = CONSUMER_KEY
-	config.consumer_secret     = CONSUMER_SECRET
-	config.access_token        = @access_token
-	config.access_token_secret = @access_secret
+    config.consumer_key        = CONSUMER_KEY
+    config.consumer_secret     = CONSUMER_SECRET
+    config.access_token        = @access_token
+    config.access_token_secret = @access_secret
   end
 
   unless File::exist?(CSVFile)
-	puts "Error : Tweets.csv Not Found"
-	print_usage
-	exit 1
+    puts "Error : Tweets.csv Not Found"
+    print_usage
+    exit 1
   end 
 
   cnt = 0
@@ -75,37 +75,37 @@ def main
 
   tweet_ids = []
   CSV.foreach("tweets.csv") do |tweet|
-	if tweet[5].lines.grep(/(.+)?#{delete_word}(.+)?/) != []
-		tweet_ids.push(tweet[0])
-	  cnt += 1
-	  puts "#{cnt} | text:#{tweet[5]} URL: #{"https://twitter.com/statues/" + tweet[0]}"
-	end
+    if tweet[5].lines.grep(/(.+)?#{delete_word}(.+)?/) != []
+        tweet_ids.push(tweet[0])
+      cnt += 1
+      puts "#{cnt} | text:#{tweet[5]} URL: #{"https://twitter.com/statues/" + tweet[0]}"
+    end
   end
 
   if cnt == 0
-	puts "#{delete_word}という文字列を含むツイートは見つかりませんでした。"
+    puts "#{delete_word}という文字列を含むツイートは見つかりませんでした。"
   else 
-	puts "#{delete_word}という文字列を含むツイートを#{cnt}個発見しました。"
-	puts "本当に削除しますか? (Y/n)"
-	answer = gets.chomp
-	if answer == "y" || answer == "Y"
-	  tweet_ids.each { |id|
-		begin 
-		  @rest_client.destroy_status(id)  
-		rescue => ex
-		  puts "Error -  ツイートが削除できませんでした。 id:#{id} Error:#{ex.message}"
-		  cnt -= 1
-		end
-	  }
+    puts "#{delete_word}という文字列を含むツイートを#{cnt}個発見しました。"
+    puts "本当に削除しますか? (Y/n)"
+    answer = gets.chomp
+    if answer == "y" || answer == "Y"
+      tweet_ids.each { |id|
+        begin 
+          @rest_client.destroy_status(id)  
+        rescue => ex
+          puts "Error -  ツイートが削除できませんでした。 id:#{id} Error:#{ex.message}"
+          cnt -= 1
+        end
+      }
 
-	  str =  "#{delete_word}という文字列を含む#{cnt}個のツイートを削除しました."
-	  puts str
-	  puts "この結果をツイートしますか? (Y/n)"
-	  answer = gets.chomp
-	  if answer == "y" || answer == "Y"
-		@rest_client.update(str + " | by https://github.com/sh4869/DBHT")
-	  end	
-	end
+      str =  "#{delete_word}という文字列を含む#{cnt}個のツイートを削除しました."
+      puts str
+      puts "この結果をツイートしますか? (Y/n)"
+      answer = gets.chomp
+      if answer == "y" || answer == "Y"
+        @rest_client.update(str + " | by https://github.com/sh4869/DBHT")
+      end	
+    end
   end
 end 
 
