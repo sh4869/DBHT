@@ -1,13 +1,32 @@
-#coding: utf-8
+# coding: utf-8
 require 'csv'
 require 'twitter'
 require 'oauth'
 require 'oauth/consumer'
+require 'rbconfig'
 require './keys.rb'
 
 SourcePath = File.expand_path('../', __FILE__)
 CSVFile = "#{SourcePath}/tweets.csv"
 TokenFile = "#{SourcePath}/token"
+
+def os
+  @os ||= (
+    host_os = RbConfig::CONFIG['host_os']
+    case host_os
+    when  /mswin|msys|mingw|cygwin|bccwin|wince|emc/
+      :windows
+    when /darwin|mac os/
+      :macosx
+    when /linux/
+      :linux
+    when /solaris|bsd/
+      :unix
+    else
+      raise Error::WebDriverError, "unknown os: #{host_os.inspect}"       
+    end
+  )
+end
 
 def oauth_first
   @consumer = OAuth::Consumer.new(CONSUMER_KEY ,CONSUMER_SECRET,{
@@ -70,8 +89,17 @@ def main
   end 
 
   cnt = 0
+  if Encoding.locale_charmap == "CP65001" && os == :windows
+    puts "このプログラムはCP65001に対応していません。chcp 932と実行してからもう一度実行してください。"
+  end
+
   puts "どんな文字の含まれたツイートを消したいか入力してください。"
   delete_word = gets.chomp
+  if os == :windows
+    if Encoding.locale_charmap == "CP932"
+      delete_word = delete_word.encode("UTF-8","Shift_JIS")  
+    end
+  end
 
   tweet_ids = []
   CSV.foreach("tweets.csv") do |tweet|
