@@ -7,7 +7,7 @@ require './keys.rb'
 
 SOURCEPATH = File.expand_path(__dir__)
 CSVPATH = "#{SOURCEPATH}/tweets.csv".freeze
-TOKENFILE = "#{SOURCEPATH}/token".freeze
+TOKENFILE = "#{SOURCEPATH}/.token".freeze
 
 def os
   os ||= begin
